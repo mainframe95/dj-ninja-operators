@@ -2,7 +2,7 @@ from os import name
 from typing import List
 from ninja import NinjaAPI
 from core.common.schema import NotFoundSchema
-from countries.schema import CountryListSchema, CountrySchema
+from countries.schema import CountryListSchema, CountrySchema, searchSchema
 from .models import Country
 
 

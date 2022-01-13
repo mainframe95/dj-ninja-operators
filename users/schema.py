@@ -13,7 +13,7 @@ class UserSchema(Schema):
     name: str
     email: str
     password: str
-    isActive: bool
+    # isActive: bool
 
 class UserUpateSchema(Schema):
     name: str

@@ -28,11 +28,18 @@ def createOperator(request, data: OperatorSchema):
     except User.DoesNotExist as e:
         return 404, {"message": " User does not exist"}
     try:
-        data.country = Country.objects.get(pk = data.country)
+        listCountry = Country.objects.filter(id__in = data.country)
     except Country.DoesNotExist as e:
         return 404, {"message": " Country does not exist"}
     try:
-        operator = Operator.objects.create(**data.dict())
+        operator = Operator(
+            name= data.name,
+            clients = data.clients,
+            createdBy = data.createdBy
+            )
+        operator.save()
+        for country in listCountry:
+            operator.country.add(country)
         return 201, operator
     # partie a voir
     except Operator.unique_error_message as e:
@@ -44,9 +51,18 @@ def createOperator(request, data: OperatorSchema):
 def operatorUpdated(request, operatorId: int, data: OperatorUpdatedSchema):
     try:
         operator = Operator.objects.get(pk = operatorId)
-        for attribute, value in data.dict().items():
-            if not data.name ==  None:
-                setattr(operator, attribute, value)
+        try:
+            listCountry = Country.objects.filter(id__in = data.country)
+            operator.country.clear()
+            for country in listCountry:
+                operator.country.add(country)
+        except Country.DoesNotExist as e:
+            return 404, {"message": " Country does not exist"}
+        # for attribute, value in data.dict().items():
+        if not data.name ==  None:
+            setattr(operator, 'name', data.name)
+        if not data.clients ==  None:
+            setattr(operator, 'clients', data.clients)
         operator.save()
         return 200, operator
     except Operator.DoesNotExist as e:

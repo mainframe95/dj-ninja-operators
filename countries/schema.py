@@ -1,5 +1,7 @@
 from datetime import datetime
 from ninja import Schema
+from typing import List
+
 
 class CountryListSchema(Schema):
     id: int
@@ -9,3 +11,6 @@ class CountryListSchema(Schema):
 
 class CountrySchema(Schema):
     name: str
+
+class searchSchema(Schema):
+    ids: List[int]
